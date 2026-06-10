@@ -1,5 +1,10 @@
 # skill-jenkins-admin
 
+[![CI](https://github.com/z1096/skill-jenkins-admin/actions/workflows/ci.yml/badge.svg)](https://github.com/z1096/skill-jenkins-admin/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/z1096/skill-jenkins-admin?display_name=tag&sort=semver)](https://github.com/z1096/skill-jenkins-admin/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#contributing)
+
 Claude Code skill for administering a Jenkins server through the
 `python-jenkins` library — host-agnostic, classifier-safe, and bundled
 with CLI scripts for the most common operations.

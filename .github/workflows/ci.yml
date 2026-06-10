@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint-and-validate:
+    name: Lint + validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff python-jenkins requests pyyaml
+
+      - name: Compile every Python file (syntax check)
+        run: python -m compileall -q skills
+
+      - name: Ruff lint
+        run: |
+          ruff check skills --select E,F,W,B,UP,I --ignore E501
+
+      - name: Validate plugin.json
+        run: |
+          python -c "import json; json.load(open('.claude-plugin/plugin.json'))"
+          python -c "import json; d=json.load(open('.claude-plugin/plugin.json')); assert d.get('name') and d.get('version') and d.get('license'), 'plugin.json missing required keys'; print('plugin.json OK:', d['name'], d['version'], d['license'])"
+
+      - name: Dry-run init_pipeline.py (SCM source)
+        run: |
+          mkdir -p /tmp/init-scm
+          python skills/jenkins-admin/scripts/init_pipeline.py demo-scm \
+            --scm-url 'git@example.com:org/repo.git' \
+            --scm-credential 'demo-cred' \
+            --scm-branch '*/main' \
+            --script-path 'ci/Jenkinsfile' \
+            --description 'CI dry-run' \
+            --output-dir /tmp/init-scm
+          ls -la /tmp/init-scm
+          test -f /tmp/init-scm/Jenkinsfile
+          test -f /tmp/init-scm/demo-scm.job.xml
+          # XML well-formed?
+          python -c "import xml.etree.ElementTree as ET; ET.parse('/tmp/init-scm/demo-scm.job.xml')"
+
+      - name: Dry-run init_pipeline.py (inline source)
+        run: |
+          mkdir -p /tmp/init-inline
+          python skills/jenkins-admin/scripts/init_pipeline.py demo-inline \
+            --source inline \
+            --output-dir /tmp/init-inline
+          test -f /tmp/init-inline/Jenkinsfile
+          test -f /tmp/init-inline/demo-inline.job.xml
+          python -c "import xml.etree.ElementTree as ET; ET.parse('/tmp/init-inline/demo-inline.job.xml')"
+
+  shellcheck:
+    name: shellcheck install.sh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: '.'
+          additional_files: 'install.sh'
+          severity: warning
