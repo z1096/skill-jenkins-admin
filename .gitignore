@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.venv/
+venv/
+.env
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Generated artifacts (init_pipeline.py output)
+*.job.xml
+!skills/**/*.job.xml      # but keep any reference XMLs committed inside the skill

@@ -1,0 +1,21 @@
+{
+  "name": "skill-jenkins-admin",
+  "version": "0.1.0",
+  "description": "Jenkins administration via python-jenkins: CRUD on jobs/views/credentials, build triggering, console log fetch, and guided pipeline scaffolding — all classifier-safe and host-agnostic.",
+  "author": {
+    "name": "zz",
+    "email": "sevethkey@qq.com"
+  },
+  "homepage": "https://github.com/z1096/skill-jenkins-admin",
+  "repository": "https://github.com/z1096/skill-jenkins-admin",
+  "license": "MIT",
+  "keywords": [
+    "jenkins",
+    "ci",
+    "cd",
+    "pipeline",
+    "python-jenkins",
+    "claude-code",
+    "skill"
+  ]
+}
