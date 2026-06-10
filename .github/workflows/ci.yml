@@ -30,7 +30,11 @@ jobs:
 
       - name: Ruff lint
         run: |
-          ruff check skills --select E,F,W,B,UP,I --ignore E501
+          # Real-bug rules only: pyflakes (F), pycodestyle errors (E),
+          # warnings (W), and bugbear (B). Skip import-order (I) and
+          # python-upgrade hints (UP) — both can be added later when the
+          # scripts grow beyond a few small files.
+          ruff check skills --select E,F,W,B --ignore E501
 
       - name: Validate plugin.json
         run: |

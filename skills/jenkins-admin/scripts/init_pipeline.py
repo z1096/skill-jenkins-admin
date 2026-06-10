@@ -96,14 +96,14 @@ def main(argv: list[str]) -> int:
     print(f"wrote {job_xml_path} ({len(xml)} bytes)")
     print()
     print("next steps:")
-    print(f"  1. Review the generated Jenkinsfile and replace the TODO stages.")
+    print("  1. Review the generated Jenkinsfile and replace the TODO stages.")
     if args.source == "scm":
         print(f"  2. Commit the Jenkinsfile to {args.scm_url} at path {args.script_path}.")
-        print(f"  3. Apply the job to Jenkins:")
+        print("  3. Apply the job to Jenkins:")
     else:
-        print(f"  2. Apply the job to Jenkins:")
+        print("  2. Apply the job to Jenkins:")
     print(f"     python {SCRIPTS_DIR / 'upsert_job.py'} {args.name} {job_xml_path}")
-    print(f"  Then smoke-test:")
+    print("  Then smoke-test:")
     print(f"     python {SCRIPTS_DIR / 'trigger_build.py'} {args.name}")
     return 0
 
