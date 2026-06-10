@@ -20,40 +20,71 @@ with CLI scripts for the most common operations.
   used by `init_pipeline.py` when guiding a user through creating a new
   pipeline from scratch.
 
-## Quick install (manual)
+## Install
+
+### One-liner (recommended)
+
+**PowerShell (Windows):**
 
 ```powershell
-# Clone next to your other Claude Code skills
-git clone https://github.com/z1096/skill-jenkins-admin "$env:USERPROFILE\.claude\skills\skill-jenkins-admin-src"
-
-# Copy just the skill folder into the user-level skills directory
-Copy-Item -Recurse `
-  "$env:USERPROFILE\.claude\skills\skill-jenkins-admin-src\skills\jenkins-admin" `
-  "$env:USERPROFILE\.claude\skills\jenkins-admin"
+irm https://raw.githubusercontent.com/z1096/skill-jenkins-admin/main/install.ps1 | iex
 ```
 
-Bash equivalent:
+**Bash (Linux / macOS / Git Bash):**
 
 ```bash
-git clone https://github.com/z1096/skill-jenkins-admin ~/.claude/skills/skill-jenkins-admin-src
-cp -r ~/.claude/skills/skill-jenkins-admin-src/skills/jenkins-admin ~/.claude/skills/
+curl -fsSL https://raw.githubusercontent.com/z1096/skill-jenkins-admin/main/install.sh | bash
 ```
 
-Restart Claude Code; the `jenkins-admin` skill should appear in the
-available-skills list.
+Both installers:
 
-## Install as a Claude Code plugin
+1. Check Python >= 3.7 and warn (without forcing) about missing
+   `python-jenkins` / `requests` libs.
+2. Download the current `main` tree from GitHub (no full clone, just
+   the zip archive — fast and no `.git/` dump in your home).
+3. Copy `skills/jenkins-admin/` into `~/.claude/skills/jenkins-admin/`,
+   overwriting any existing install. Idempotent.
+4. Print the next steps (env vars to set, how to invoke).
 
-The repo already ships a `plugin.json` under `.claude-plugin/`, so plugin
-managers (or future native Claude Code plugin sources) can install it
-straight from the GitHub URL. Once Claude Code's plugin marketplace
-accepts third-party sources, the install will become a single command:
+**Pin a release:** set `SKILL_JENKINS_ADMIN_REF=v0.1.0` (or any tag /
+branch / commit) before running the installer to fetch that ref instead
+of `main`.
+
+### Manual install (git clone)
+
+```bash
+git clone https://github.com/z1096/skill-jenkins-admin /tmp/sja
+cp -r /tmp/sja/skills/jenkins-admin ~/.claude/skills/
+```
+
+PowerShell equivalent:
+
+```powershell
+git clone https://github.com/z1096/skill-jenkins-admin "$env:TEMP\sja"
+Copy-Item -Recurse "$env:TEMP\sja\skills\jenkins-admin" "$env:USERPROFILE\.claude\skills\jenkins-admin"
+```
+
+### Plugin install (future)
+
+The repo ships a `plugin.json` under `.claude-plugin/`. When Claude
+Code's plugin marketplace opens to third-party sources, the install will
+become:
 
 ```text
 /plugin install https://github.com/z1096/skill-jenkins-admin
 ```
 
-Until then the manual copy above is the supported path.
+Until then the installer scripts above are the supported path.
+
+### Verifying the install
+
+Restart Claude Code. The skill is loaded at session start and shows up
+in the available-skills list. You can also confirm by ls'ing the dir:
+
+```bash
+ls ~/.claude/skills/jenkins-admin
+# Expect: SKILL.md and scripts/
+```
 
 ## Set up your Jenkins credentials
 
